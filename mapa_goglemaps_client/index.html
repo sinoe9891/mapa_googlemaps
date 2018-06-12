@@ -19,7 +19,7 @@
 <!--IMPORTANTE RESPETAR EL ORDEN -->
 <!--ESTILOS DE BOOSTRAP -->
 <link href="css/bootstrap.min.css" rel="stylesheet" />
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClyfWUx8bDWl0luDTHYD5aM5-DX4QPN2U&callback=initMap""></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlachDpUUAsHTQeb1TrKU3kRb7bwkGTS8&callback=initMap"></script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js" ></script>
 <!--ARCHIVOS JAVASCRIPT DE BOOTSTRAP -->
 <script type="text/javascript" src="js/bootstrap.min.js" ></script>
@@ -39,10 +39,10 @@
         }
     }
     $(document).on("ready", function(){
-        
+
         //VARIABLE DE FORMULARIO
         var formulario = $("#formulario");
-        
+
         var punto = new google.maps.LatLng(14.008758829124403, -87.00933694839478);
         var config = {
             zoom:7,
@@ -53,12 +53,12 @@
 
         google.maps.event.addListener(mapa, "click", function(event){
            var coordenadas = event.latLng.toString();
-           
+
            coordenadas = coordenadas.replace("(", "");
            coordenadas = coordenadas.replace(")", "");
-           
+
            var lista = coordenadas.split(",");
-           
+
            var direccion = new google.maps.LatLng(lista[0], lista[1], lista[2], lista[3], lista[4]);
            //PASAR LA INFORMACI�N AL FORMULARIO
            formulario.find("input[name='titulo']").focus();
@@ -67,12 +67,12 @@
            formulario.find("input[name='pais']").val(lista[2]);
            formulario.find("input[name='rubro']").val(lista[3]);
            formulario.find("input[name='area_tematica']").val(lista[4]);
-           
-           
+
+
            var marcador = new google.maps.Marker({
                //titulo:prompt("Titulo del marcador?"),
                position:direccion,
-               map: mapa, 
+               map: mapa,
                animation:google.maps.Animation.DROP,
                draggable:false
            });
@@ -81,11 +81,11 @@
            $("#collapseTwo").collapse('hide');
            //ALMACENAR UN MARCADOR EN EL ARRAY nuevos_marcadores
            nuevos_marcadores.push(marcador);
-           
+
            google.maps.event.addListener(marcador, "click", function(){
 
            });
-           
+
            //BORRAR MARCADORES NUEVOS
            limpiar_marcadores(nuevos_marcadores);
            marcador.setMap(mapa);
@@ -93,7 +93,7 @@
         $("#btn_grabar").on("click", function(){
             //INSTANCIAR EL FORMULARIO
             var f = $("#formulario");
-            
+
             //VALIDAR CAMPO TITULO
             if(f.find("input[name='titulo']").val().trim()=="")
             {
@@ -128,7 +128,7 @@
                 return false;
             }
             //FIN VALIDACIONES
-            
+
             if(f.hasClass("busy"))
             {
                 //Cuando se haga clic en el boton grabar
@@ -143,7 +143,7 @@
             //Y CUANDO QUITAR LA CLASE BUSY?
             //CUANDO SE TERMINE DE PROCESAR ESTA SOLICITUD
             //ES DECIR EN EL EVENTO COMPLETE
-            
+
             var loader_grabar = $("#loader_grabar");
            $.ajax({
                type:"POST",
@@ -152,7 +152,7 @@
                data:f.serialize()+"&tipo=grabar",
                success:function(data){
                    //alert(data.mensaje);
-                   
+
                    listar();
                },
                beforeSend:function(){
@@ -191,8 +191,8 @@
         if(data.estado=="ok")
         {
           $("<option default>Resultados</option>").appendTo(select_resultados);
-          $.each(data.mensaje, function(i, item){ 
-            $("<option data-cx='"+item.cx+"' data-cy='"+item.cy+"' value='"+item.IdPunto+"'>"+item.Titulo+"</option>")    
+          $.each(data.mensaje, function(i, item){
+            $("<option data-cx='"+item.cx+"' data-cy='"+item.cy+"' value='"+item.IdPunto+"'>"+item.Titulo+"</option>")
             .appendTo(select_resultados);
         });
         }
@@ -200,11 +200,11 @@
       beforeSend: function(){
         select_resultados.empty(); //limpia combobox
         },
-      
+
       complete: function(){
-    
+
       }
-      
+
       });
       return false;
     });
@@ -222,7 +222,7 @@
       var myLatLng = new google.maps.LatLng(cx, cy);
       //variable mapa
       mapa.setCenter(myLatLng);
-    }); 
+    });
         //CARGAR PUNTOS AL TERMINAR DE CARGAR LA P�GINA
         listar();//FUNCIONA, AHORA A GRAFICAR LOS PUNTOS EN EL MAPA
     });
@@ -261,15 +261,15 @@
                             google.maps.event.addListener(marca, "click", function(){
                                 $("#collapseOne").collapse('hide');
                                 $("#collapseTwo").collapse('show');
-                               
+
                                //SOLO MOVER CUANDO SE MARQUE EL CHECKBOX DEL FORMULARIO
                                if($("#opc_edicion").prop("checked"))
-                               
+
                                {
                                     //HACER UN MARCADOR DRAGGABLE
                                     marca.setOptions({draggable: true});
 
-                                    google.maps.event.addListener(marca, 'dragend', function(event) { 
+                                    google.maps.event.addListener(marca, 'dragend', function(event) {
                                         //AL FINAL DE MOVE EL MARCADOR
                                         //ESTE MISMO YA SE ACTUALIZA CON LAS NUEVAS COORDENADAS
                                         //alert(marca.position);
@@ -280,20 +280,20 @@
                                         f_eliminar.find("input[name='cx']").val(lista[0]);
                                         f_eliminar.find("input[name='cy']").val(lista[1]);
                                         f_eliminar.find("input[name='pais']").val(lista[2]);
-                                        
+
                                     } );
                                 }
                                 //ESTO HALA LA INFORMACIÓN DE LA TABLA A EL FORMULARIO AL MOMENTO DE EDITAR
                                 else
                                 {
-                                    
+
                                     f_eliminar.find("input[name='titulo']").val(marca.titulo);
                                     f_eliminar.find("input[name='cx']").val(marca.cx);
                                     f_eliminar.find("input[name='cy']").val(marca.cy);
                                     f_eliminar.find("input[name='pais']").val(marca.pais);
                                     f_eliminar.find("input[name='rubro']").val(marca.rubro);
                                     f_eliminar.find("input[name='area_tematica']").val(marca.area_tematica);
-                                    f_eliminar.find("input[name='id']").val(marca.idMarcador);                                    
+                                    f_eliminar.find("input[name='id']").val(marca.idMarcador);
 
                                 }
 
@@ -311,15 +311,15 @@
                     }
                },
                beforeSend:function(){
-                   
+
                },
                complete:function(){
-                   
+
                }
            });
     }
     //PLANTILLA AJAX
-    
+
 </script>
 </head>
 <body>
@@ -350,7 +350,7 @@
                   </select></td>
                   <td></td>
                   </tr>
-                  </table>                  
+                  </table>
                   </form>
                 </div>
               </div>
